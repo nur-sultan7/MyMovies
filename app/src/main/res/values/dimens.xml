@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="size_of_star">40dp</dimen>
+    <dimen name="margin_left_movie_info">16dp</dimen>
+    <dimen name="margin_right_movie_info">16dp</dimen>
+</resources>
