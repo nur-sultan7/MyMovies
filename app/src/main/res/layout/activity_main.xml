@@ -23,7 +23,7 @@
         android:textColor="@android:color/white"
         android:onClick="onClickSetPopularity"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="7dp"
+        android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
         android:text="@string/most_popular"
         app:layout_constraintBottom_toBottomOf="@+id/switchSort"
