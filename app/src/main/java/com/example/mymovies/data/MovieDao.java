@@ -18,6 +18,7 @@ public interface MovieDao {
 
     @Query("SELECT * FROM movies WHERE id==:movieId")
     Movie getMovieById(int movieId);
+
     @Query("SELECT * FROM favourite_movie WHERE id==:movieId")
     FavouriteMovie getFavouriteMovieById(int movieId);
 
