@@ -6,6 +6,8 @@ import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
 
+import com.example.mymovies.pojo.Movie;
+
 import java.util.List;
 
 @Dao
@@ -25,6 +27,8 @@ public interface MovieDao {
     @Query("DELETE FROM movies")
     void deleteAllMovies();
 
+    @Insert
+    void insertMovies(List<com.example.mymovies.pojo.Movie> movies);
     @Insert
     void insertMovie(Movie movie);
 

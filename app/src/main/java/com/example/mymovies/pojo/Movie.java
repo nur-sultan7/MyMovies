@@ -1,11 +1,18 @@
 package com.example.mymovies.pojo;
 
+import androidx.room.Entity;
+import androidx.room.Ignore;
+import androidx.room.PrimaryKey;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.ArrayList;
 import java.util.List;
-
+@Entity(tableName = "movies")
 public class Movie {
+    @PrimaryKey(autoGenerate = true)
+    private int uniqueId;
     @SerializedName("poster_path")
     @Expose
     private String posterPath;
@@ -20,7 +27,7 @@ public class Movie {
     private String releaseDate;
     @SerializedName("genre_ids")
     @Expose
-    private List<Integer> genreIds = null;
+    private List<Integer> genreIds =new ArrayList<>();
     @SerializedName("id")
     @Expose
     private int id;
@@ -48,6 +55,49 @@ public class Movie {
     @SerializedName("vote_average")
     @Expose
     private double voteAverage;
+
+    public int getUniqueId() {
+        return uniqueId;
+    }
+
+    public void setUniqueId(int uniqueId) {
+        this.uniqueId = uniqueId;
+    }
+
+    public Movie(int uniqueId, String posterPath, boolean adult, String overview, String releaseDate, List<Integer> genreIds, int id, String originalTitle, String originalLanguage, String title, String backdropPath, double popularity, int voteCount, boolean video, double voteAverage) {
+        this.uniqueId=uniqueId;
+        this.posterPath = posterPath;
+        this.adult = adult;
+        this.overview = overview;
+        this.releaseDate = releaseDate;
+        this.genreIds = genreIds;
+        this.id = id;
+        this.originalTitle = originalTitle;
+        this.originalLanguage = originalLanguage;
+        this.title = title;
+        this.backdropPath = backdropPath;
+        this.popularity = popularity;
+        this.voteCount = voteCount;
+        this.video = video;
+        this.voteAverage = voteAverage;
+    }
+    @Ignore
+    public Movie(String posterPath, boolean adult, String overview, String releaseDate, List<Integer> genreIds, int id, String originalTitle, String originalLanguage, String title, String backdropPath, double popularity, int voteCount, boolean video, double voteAverage) {
+        this.posterPath = posterPath;
+        this.adult = adult;
+        this.overview = overview;
+        this.releaseDate = releaseDate;
+        this.genreIds = genreIds;
+        this.id = id;
+        this.originalTitle = originalTitle;
+        this.originalLanguage = originalLanguage;
+        this.title = title;
+        this.backdropPath = backdropPath;
+        this.popularity = popularity;
+        this.voteCount = voteCount;
+        this.video = video;
+        this.voteAverage = voteAverage;
+    }
 
     public String getPosterPath() {
         return posterPath;

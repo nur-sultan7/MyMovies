@@ -13,7 +13,8 @@ import android.os.Bundle;
 import com.example.mymovies.adapters.MovieAdapter;
 import com.example.mymovies.data.FavouriteMovie;
 import com.example.mymovies.data.MainViewModel;
-import com.example.mymovies.data.Movie;
+import com.example.mymovies.pojo.Movie;
+
 
 import java.util.ArrayList;
 import java.util.List;

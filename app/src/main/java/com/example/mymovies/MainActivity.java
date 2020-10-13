@@ -25,7 +25,8 @@ import android.widget.TextView;
 
 import com.example.mymovies.adapters.MovieAdapter;
 import com.example.mymovies.data.MainViewModel;
-import com.example.mymovies.data.Movie;
+
+import com.example.mymovies.pojo.Movie;
 import com.example.mymovies.utils.JSONUtils;
 import com.example.mymovies.utils.NetworkUtils;
 
@@ -129,7 +130,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
             public void onReachEnd() {
                 if(!isLoading)
                 {
-                    downloadData(methodOfSort,page);
+                   viewModel.loadData(methodOfSort,page,lang);
                 }
 
             }
@@ -201,23 +202,23 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     @Override
     public void onLoadFinished(@NonNull Loader<JSONObject> loader, JSONObject data) {
 
-        ArrayList<Movie> movies = JSONUtils.getMoviesFromJSON(data);
-        if (movies !=null &&  !movies.isEmpty())
-        {
-            if (page==1) {
-                viewModel.deleteAllMovies();
-                movieAdapter.clear();
-            }
-            for (Movie movie: movies)
-            {
-                viewModel.insertMovie(movie);
-            }
-            movieAdapter.addMovies(movies);
-            page++;
-        }
-        isLoading =false;
-        progressBarLoading.setVisibility(View.INVISIBLE);
-        loaderManager.destroyLoader(LOADER_ID);
+//        ArrayList<Movie> movies = JSONUtils.getMoviesFromJSON(data);
+//        if (movies !=null &&  !movies.isEmpty())
+//        {
+//            if (page==1) {
+//                viewModel.deleteAllMovies();
+//                movieAdapter.clear();
+//            }
+//            for (Movie movie: movies)
+//            {
+//                viewModel.insertMovie(movie);
+//            }
+//            movieAdapter.addMovies(movies);
+//            page++;
+//        }
+//        isLoading =false;
+//        progressBarLoading.setVisibility(View.INVISIBLE);
+//        loaderManager.destroyLoader(LOADER_ID);
     }
 
 

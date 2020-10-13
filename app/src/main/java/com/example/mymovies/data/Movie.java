@@ -1,10 +1,10 @@
 package com.example.mymovies.data;
-
+/*
 import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
-@Entity(tableName = "movies")
+
 public class Movie {
     @PrimaryKey (autoGenerate = true)
     private int uniqueId;
@@ -135,3 +135,4 @@ public class Movie {
         this.releaseDate = releaseDate;
     }
 }
+*/

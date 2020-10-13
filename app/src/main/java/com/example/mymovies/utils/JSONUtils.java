@@ -1,8 +1,9 @@
 package com.example.mymovies.utils;
 
-import com.example.mymovies.data.Movie;
+
 import com.example.mymovies.data.Review;
 import com.example.mymovies.data.Trailer;
+import com.example.mymovies.pojo.Movie;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -106,8 +107,8 @@ public class JSONUtils {
                 String backDropPath = objectMovie.getString(KEY_BACKDROP_PATH);
                 double voteAverage = objectMovie.getDouble(KEY_VOTE_AVERAGE);
                 String releaseDate = objectMovie.getString(KEY_RELEASE_DATE);
-                Movie movie = new Movie(id,voteCount,title,originalTitle,overview,posterPath,bigPosterPath,backDropPath,voteAverage,releaseDate);
-                result.add(movie);
+               // Movie movie = new Movie(id,voteCount,title,originalTitle,overview,posterPath,bigPosterPath,backDropPath,voteAverage,releaseDate);
+                //result.add(movie);
             }
 
         } catch (JSONException e) {

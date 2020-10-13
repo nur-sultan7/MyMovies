@@ -1,6 +1,8 @@
 package com.example.mymovies.api;
 
 import com.example.mymovies.pojo.MovieResponse;
+import com.example.mymovies.pojo.ReviewsResponse;
+import com.example.mymovies.pojo.VideosResponse;
 
 import io.reactivex.Observable;
 import retrofit2.http.GET;
@@ -19,9 +21,9 @@ public interface ApiService {
                                         @Query(PARAMS_SORT_BY) String sort_by,@Query(PARAMS_PAGE) String page,
                                         @Query(PARAMS_MIN_VOTE_COUNT) String min_vote_count);
 @GET("movie/{id}/videos")
-    Observable<MovieResponse> getVideos(@Path("id") int id,@Query(PARAMS_API_KEY) String api_key,
-                                        @Query(PARAMS_LANGUAGE) String lang);
+    Observable<VideosResponse> getVideos(@Path("id") int id, @Query(PARAMS_API_KEY) String api_key,
+                                         @Query(PARAMS_LANGUAGE) String lang);
 @GET("movie/{id}/reviews")
-    Observable<MovieResponse> getReviews(@Path("id") int id,@Query(PARAMS_API_KEY) String api_key,
-                                        @Query(PARAMS_LANGUAGE) String lang);
+    Observable<ReviewsResponse> getReviews(@Path("id") int id, @Query(PARAMS_API_KEY) String api_key,
+                                                    @Query(PARAMS_LANGUAGE) String lang);
 }

@@ -19,9 +19,10 @@ import com.example.mymovies.adapters.ReviewAdapter;
 import com.example.mymovies.adapters.TrailerAdapter;
 import com.example.mymovies.data.FavouriteMovie;
 import com.example.mymovies.data.MainViewModel;
-import com.example.mymovies.data.Movie;
+
 import com.example.mymovies.data.Review;
 import com.example.mymovies.data.Trailer;
+import com.example.mymovies.pojo.Movie;
 import com.example.mymovies.utils.JSONUtils;
 import com.example.mymovies.utils.NetworkUtils;
 import com.squareup.picasso.Picasso;
@@ -88,7 +89,7 @@ public class DetailActivity extends AppCompatActivity {
             movie = viewModel.getFavouriteMovieById(id);
         }
         Picasso.get()
-                .load(movie.getBigPosterPath())
+                .load(movie.getPosterPath())
                 .placeholder(R.drawable.ic_movie)
                 .into(imageViewBigPoster);
         textViewTitle.setText(movie.getTitle());
