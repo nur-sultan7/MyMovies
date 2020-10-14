@@ -15,6 +15,12 @@ import java.util.List;
 @Entity(tableName = "movies")
 @TypeConverters(value = Converter.class)
 public class Movie {
+    @Ignore
+    private static final String BASE_POSTER_URL = "https://image.tmdb.org/t/p/";
+    @Ignore
+    private static final String SMALL_POSTER_SIZE = "w185";
+    @Ignore
+    private static final String BIG_POSTER_SIZE = "w780";
     @PrimaryKey(autoGenerate = true)
     private int uniqueId;
     @SerializedName("poster_path")
@@ -31,7 +37,8 @@ public class Movie {
     private String releaseDate;
     @SerializedName("genre_ids")
     @Expose
-    private List<Integer> genreIds=null ;
+    @TypeConverters(value = Converter.class)
+    private List<Integer> genreIds;
     @SerializedName("id")
     @Expose
     private int id;
@@ -101,6 +108,16 @@ public class Movie {
         this.voteCount = voteCount;
         this.video = video;
         this.voteAverage = voteAverage;
+    }
+    @Ignore
+    public String getSmallPosterPath()
+    {
+        return BASE_POSTER_URL+SMALL_POSTER_SIZE+getBackdropPath();
+    }
+    @Ignore
+    public String getBigPosterPath()
+    {
+        return BASE_POSTER_URL+BIG_POSTER_SIZE+getBackdropPath();
     }
 
     public String getPosterPath() {

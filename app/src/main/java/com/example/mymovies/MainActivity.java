@@ -19,6 +19,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.CompoundButton;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -29,6 +30,7 @@ import com.example.mymovies.data.MainViewModel;
 import com.example.mymovies.pojo.Movie;
 import com.example.mymovies.utils.JSONUtils;
 import com.example.mymovies.utils.NetworkUtils;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONObject;
 
@@ -37,7 +39,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<JSONObject> {
+public class MainActivity extends AppCompatActivity  {
 
     private RecyclerView recyclerView;
     private MovieAdapter movieAdapter;
@@ -49,13 +51,14 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     private MainViewModel viewModel;
 
     private static final int LOADER_ID=135;
-    private LoaderManager loaderManager;
+
 
     private static int page=1;
     private static int methodOfSort;
     private static boolean isLoading = false;
 
     private static String lang;
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -86,7 +89,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         DisplayMetrics displayMetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         int width = displayMetrics.densityDpi;
-        return width / 185 > 2 ? width / 185 : 2;
+        return width / 400 > 2 ? width / 185 : 2;
 
     }
 
@@ -96,7 +99,9 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         setContentView(R.layout.activity_main);
         lang= Locale.getDefault().getLanguage();
         progressBarLoading = findViewById(R.id.progressBarLoad);
-        loaderManager = LoaderManager.getInstance(this);
+
+
+
         viewModel = ViewModelProviders.of(this).get(MainViewModel.class);
         textViewPopularity = findViewById(R.id.textViewPopularity);
         textViewTopRated = findViewById(R.id.textViewTopRated);
@@ -130,7 +135,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
             public void onReachEnd() {
                 if(!isLoading)
                 {
-                   viewModel.loadData(methodOfSort,page,lang);
+   //                viewModel.loadData(methodOfSort,page,lang);
                 }
 
             }
@@ -144,6 +149,8 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
                 {
                     movieAdapter.setMovies(movies);
                 }
+
+
 
             }
         });
@@ -163,7 +170,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
             textViewPopularity.setTextColor(getResources().getColor(R.color.colorAccent));
             textViewTopRated.setTextColor(getResources().getColor(android.R.color.white));
         }
-        downloadData(methodOfSort,1);
+        viewModel.loadData(methodOfSort,page,lang);
     }
 
     public void onClickSetTopRated(View view) {
@@ -176,55 +183,5 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         switchSort.setChecked(false);
     }
 
-    private void downloadData(int methodOfSort, int page)
-    {
-        URL url = NetworkUtils.buildURL(methodOfSort,page,lang);
-        Bundle bundle = new Bundle();
-        bundle.putString("url",url.toString());
-        loaderManager.restartLoader(LOADER_ID,bundle,this);
 
-    }
-
-    @NonNull
-    @Override
-    public Loader onCreateLoader(int id, @Nullable Bundle args) {
-        NetworkUtils.JSONLoader jsonLoader = new NetworkUtils.JSONLoader(this,args);
-       jsonLoader.setOnStartLoadingListener(new NetworkUtils.JSONLoader.OnStartLoadingListener() {
-           @Override
-           public void onStartLoading() {
-               progressBarLoading.setVisibility(View.VISIBLE);
-               isLoading=true;
-           }
-       });
-        return jsonLoader;
-    }
-
-    @Override
-    public void onLoadFinished(@NonNull Loader<JSONObject> loader, JSONObject data) {
-
-//        ArrayList<Movie> movies = JSONUtils.getMoviesFromJSON(data);
-//        if (movies !=null &&  !movies.isEmpty())
-//        {
-//            if (page==1) {
-//                viewModel.deleteAllMovies();
-//                movieAdapter.clear();
-//            }
-//            for (Movie movie: movies)
-//            {
-//                viewModel.insertMovie(movie);
-//            }
-//            movieAdapter.addMovies(movies);
-//            page++;
-//        }
-//        isLoading =false;
-//        progressBarLoading.setVisibility(View.INVISIBLE);
-//        loaderManager.destroyLoader(LOADER_ID);
-    }
-
-
-
-    @Override
-    public void onLoaderReset(@NonNull Loader loader) {
-
-    }
 }

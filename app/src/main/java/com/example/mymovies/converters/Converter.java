@@ -22,7 +22,8 @@ public class Converter {
         ArrayList<Integer> list = new ArrayList<>();
         for (Object o: arrayList)
         {
-            list.add(Integer.valueOf(o.toString()));
+            double d = Double.parseDouble(o.toString());
+            list.add((int) d);
         }
         return list;
     }

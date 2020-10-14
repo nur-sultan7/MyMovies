@@ -22,7 +22,7 @@ import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
 public class MainViewModel extends AndroidViewModel {
-    private static final String PARAMS_MIN_VOTE_COUNT = "vote_count.gte";
+
 
     private static final String API_KEY = "93583a10883c1e30212173ba58e9d57b";
 
