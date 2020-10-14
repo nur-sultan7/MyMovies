@@ -5,8 +5,8 @@
     <string name="top_rated">Top rating</string>
     <string name="add_favourite">Добавлено в избранное</string>
     <string name="delete_favourite">Удалено из избранного</string>
-    <string name="item_main">Главная</string>
-    <string name="item_favourite">Избранное</string>
+    <string name="item_main">Main</string>
+    <string name="item_favourite">Favourite</string>
     <string name="start_trailer">Запустить трейлер</string>
     <string name="film_name">Name</string>
     <string name="film_original_name">Original name</string>

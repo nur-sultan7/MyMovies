@@ -89,7 +89,7 @@ public class DetailActivity extends AppCompatActivity {
             movie = viewModel.getFavouriteMovieById(id);
         }
         Picasso.get()
-                .load(movie.getPosterPath())
+                .load(movie.getBigPosterPath())
                 .placeholder(R.drawable.ic_movie)
                 .into(imageViewBigPoster);
         textViewTitle.setText(movie.getTitle());
