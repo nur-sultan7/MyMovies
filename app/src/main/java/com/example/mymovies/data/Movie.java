@@ -10,7 +10,7 @@ public class Movie {
     private int uniqueId;
     private int id;
     private int voteCount;
-    private String title;
+    private String title;k
     private String originalTitle;
     private String overview;
     private String posterPath;

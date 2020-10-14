@@ -3,13 +3,17 @@ package com.example.mymovies.pojo;
 import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
+import androidx.room.TypeConverter;
+import androidx.room.TypeConverters;
 
+import com.example.mymovies.converters.Converter;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.ArrayList;
 import java.util.List;
 @Entity(tableName = "movies")
+@TypeConverters(value = Converter.class)
 public class Movie {
     @PrimaryKey(autoGenerate = true)
     private int uniqueId;
@@ -27,7 +31,7 @@ public class Movie {
     private String releaseDate;
     @SerializedName("genre_ids")
     @Expose
-    private List<Integer> genreIds =new ArrayList<>();
+    private List<Integer> genreIds=null ;
     @SerializedName("id")
     @Expose
     private int id;
