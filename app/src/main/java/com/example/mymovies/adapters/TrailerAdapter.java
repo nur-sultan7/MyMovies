@@ -10,19 +10,21 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.mymovies.R;
 import com.example.mymovies.data.Trailer;
+import com.example.mymovies.pojo.Video;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class TrailerAdapter extends RecyclerView.Adapter<TrailerAdapter.TrailerViewHolder> {
-    private ArrayList<Trailer> trailers;
+    private List<Video> trailers =new ArrayList<>();
     private OnTrailerClickListener onTrailerClickListener;
 
     public void setOnTrailerClickListener(OnTrailerClickListener onTrailerClickListener) {
         this.onTrailerClickListener = onTrailerClickListener;
     }
 
-    public void setTrailers(ArrayList<Trailer> trailers) {
-        this.trailers = trailers;
+    public void setTrailers(List<Video> trailers) {
+        this.trailers=trailers;
         notifyDataSetChanged();
     }
 
@@ -35,7 +37,7 @@ public class TrailerAdapter extends RecyclerView.Adapter<TrailerAdapter.TrailerV
 
     @Override
     public void onBindViewHolder(@NonNull TrailerViewHolder holder, int position) {
-        Trailer trailer = trailers.get(position);
+        Video trailer = trailers.get(position);
 
         holder.textViewNameOfVideo.setText(trailer.getName());
     }

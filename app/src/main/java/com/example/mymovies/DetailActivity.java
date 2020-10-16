@@ -1,6 +1,7 @@
 package com.example.mymovies;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -20,9 +21,10 @@ import com.example.mymovies.adapters.TrailerAdapter;
 import com.example.mymovies.data.FavouriteMovie;
 import com.example.mymovies.data.MainViewModel;
 
-import com.example.mymovies.data.Review;
 import com.example.mymovies.data.Trailer;
 import com.example.mymovies.pojo.Movie;
+import com.example.mymovies.pojo.Review;
+import com.example.mymovies.pojo.Video;
 import com.example.mymovies.utils.JSONUtils;
 import com.example.mymovies.utils.NetworkUtils;
 import com.squareup.picasso.Picasso;
@@ -30,10 +32,11 @@ import com.squareup.picasso.Picasso;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 public class DetailActivity extends AppCompatActivity {
-
+    private static final String BASE_YOUTUBE_URL ="https://www.youtube.com/watch?v=";
     private ImageView imageViewBigPoster;
     private TextView textViewTitle;
     private TextView textViewOriginalTitle;
@@ -105,7 +108,7 @@ public class DetailActivity extends AppCompatActivity {
         trailerAdapter.setOnTrailerClickListener(new TrailerAdapter.OnTrailerClickListener() {
             @Override
             public void onTrailerClick(String url) {
-                Intent intentToTrailer = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                Intent intentToTrailer = new Intent(Intent.ACTION_VIEW, Uri.parse(BASE_YOUTUBE_URL+url));
                 startActivity(intentToTrailer);
             }
         });
@@ -113,12 +116,25 @@ public class DetailActivity extends AppCompatActivity {
         recyclerViewTrailers.setLayoutManager(new LinearLayoutManager(this));
         recyclerViewTrailers.setAdapter(trailerAdapter);
         recyclerViewReviews.setAdapter(reviewAdapter);
-        JSONObject jsonObjectTrailers = NetworkUtils.getJSONForVideos(movie.getId(),lang);
-        JSONObject jsonObjectReviews = NetworkUtils.getJSONForReviews(movie.getId(), lang);
-        ArrayList<Trailer> trailers = JSONUtils.getTrailersFromJSON(jsonObjectTrailers);
-        ArrayList<Review> reviews = JSONUtils.getReviewsFromJSON(jsonObjectReviews);
-        reviewAdapter.setReviews(reviews);
-        trailerAdapter.setTrailers(trailers);
+//        JSONObject jsonObjectTrailers = NetworkUtils.getJSONForVideos(movie.getId(),lang);
+//        JSONObject jsonObjectReviews = NetworkUtils.getJSONForReviews(movie.getId(), lang);
+//        ArrayList<Trailer> trailers = JSONUtils.getTrailersFromJSON(jsonObjectTrailers);
+//        ArrayList<Review> reviews = JSONUtils.getReviewsFromJSON(jsonObjectReviews);
+     //   List<Video> trailers =  viewModel.loadVideosOfMovie(movie.getId(),lang);
+        viewModel.getReviewList().observe(this, new Observer<List<Review>>() {
+            @Override
+            public void onChanged(List<Review> reviews) {
+                reviewAdapter.setReviews(reviews);
+            }
+        });
+        viewModel.getVideosList().observe(this, new Observer<List<Video>>() {
+            @Override
+            public void onChanged(List<Video> videos) {
+                trailerAdapter.setTrailers(videos);
+            }
+        });
+       viewModel.loadReviewsOfMovie(movie.getId(),lang);
+       viewModel.loadVideosOfMovie(movie.getId(),lang);
 
     }
 

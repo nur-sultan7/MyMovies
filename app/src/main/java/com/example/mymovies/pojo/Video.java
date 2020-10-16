@@ -1,9 +1,14 @@
 package com.example.mymovies.pojo;
 
+import androidx.room.Ignore;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 public class Video {
+
+
+
     @SerializedName("id")
     @Expose
     private String id;

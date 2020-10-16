@@ -9,13 +9,14 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.mymovies.R;
-import com.example.mymovies.data.Review;
+import com.example.mymovies.pojo.Review;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.zip.Inflater;
 
 public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ReviewViewHolder> {
-    private ArrayList<Review> reviews;
+    private List<com.example.mymovies.pojo.Review> reviews = new ArrayList<>();
 
     @NonNull
     @Override
@@ -31,8 +32,8 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ReviewView
         holder.textViewContent.setText(review.getContent());
     }
 
-    public void setReviews(ArrayList<Review> reviews) {
-        this.reviews = reviews;
+    public void setReviews(List<com.example.mymovies.pojo.Review> reviews) {
+        this.reviews=reviews;
         notifyDataSetChanged();
     }
 

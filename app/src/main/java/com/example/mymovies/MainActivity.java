@@ -100,8 +100,6 @@ public class MainActivity extends AppCompatActivity  {
         lang= Locale.getDefault().getLanguage();
         progressBarLoading = findViewById(R.id.progressBarLoad);
 
-
-
         viewModel = ViewModelProviders.of(this).get(MainViewModel.class);
         textViewPopularity = findViewById(R.id.textViewPopularity);
         textViewTopRated = findViewById(R.id.textViewTopRated);
@@ -149,8 +147,6 @@ public class MainActivity extends AppCompatActivity  {
                 {
                     movieAdapter.setMovies(movies);
                 }
-
-
 
             }
         });

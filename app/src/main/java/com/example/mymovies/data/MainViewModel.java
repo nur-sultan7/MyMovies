@@ -6,12 +6,18 @@ import android.os.AsyncTask;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 
 import com.example.mymovies.api.ApiFactory;
 import com.example.mymovies.api.ApiService;
 import com.example.mymovies.pojo.Movie;
 import com.example.mymovies.pojo.MovieResponse;
+import com.example.mymovies.pojo.Review;
+import com.example.mymovies.pojo.ReviewsResponse;
+import com.example.mymovies.pojo.Video;
+import com.example.mymovies.pojo.VideosResponse;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
@@ -33,17 +39,32 @@ public class MainViewModel extends AndroidViewModel {
     private LiveData<List<Movie>> movies;
     private LiveData<List<FavouriteMovie>> favouriteMovies;
 
-    public LiveData<List<Movie>> getMovies() {
-        return movies;
-    }
+    private static MutableLiveData<List<Review>> reviewList;
+    private static MutableLiveData<List<Video>>  videosList;
 
     public MainViewModel(@NonNull Application application) {
         super(application);
         database = MovieDatabase.getInstance(getApplication());
         movies = database.movieDao().getAllMovies();
         favouriteMovies = database.movieDao().getAllFavouriteMovies();
+        reviewList= new MutableLiveData<>();
+        videosList = new MutableLiveData<>();
     }
-    public void loadData(int sortBy, int page, String lang) {
+
+    public LiveData<List<Video>> getVideosList() {
+        return videosList;
+    }
+
+
+    public LiveData<List<Review>> getReviewList() {
+        return reviewList;
+    }
+    public LiveData<List<Movie>> getMovies() {
+        return movies;
+    }
+
+
+    public void loadData(int sortBy, final int page, String lang) {
         String methodOfSort;
         if (sortBy == 0) {
             methodOfSort = SORT_BY_POPULARITY;
@@ -59,8 +80,13 @@ public class MainViewModel extends AndroidViewModel {
                 .subscribe(new Consumer<MovieResponse>() {
                     @Override
                     public void accept(MovieResponse moviewsResponse) throws Exception {
-                        deleteAllMovies();
-                        insertMovies(moviewsResponse.getResults());
+
+                        List<Movie> list = movies.getValue();
+                        if (page==1 && movies.getValue()!=null && movies.getValue().size()==0 ) {
+                           // deleteAllMovies();
+                            insertMovies(moviewsResponse.getResults());
+                        }
+
                     }
                 }, new Consumer<Throwable>() {
                     @Override
@@ -69,6 +95,52 @@ public class MainViewModel extends AndroidViewModel {
                     }
                 });
         compositeDisposable.add(disposable);
+    }
+    public void loadVideosOfMovie(int movieId, String lang)
+    {
+
+        ApiFactory apiFactory = ApiFactory.getInstance();
+        ApiService apiService = apiFactory.getApiService();
+        CompositeDisposable compositeDisposable = new CompositeDisposable();
+        Disposable disposable = apiService.getVideos(movieId,API_KEY,lang)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<VideosResponse>() {
+                    @Override
+                    public void accept(VideosResponse videosResponse) throws Exception {
+                    videosList.setValue(videosResponse.getResults());
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+
+                    }
+                });
+        compositeDisposable.add(disposable);
+
+    }
+    public void loadReviewsOfMovie(int movieId, String lang)
+    {
+
+        ApiFactory apiFactory = ApiFactory.getInstance();
+        ApiService apiService = apiFactory.getApiService();
+        CompositeDisposable compositeDisposable = new CompositeDisposable();
+        Disposable disposable = apiService.getReviews(movieId,API_KEY,lang)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<ReviewsResponse>() {
+                    @Override
+                    public void accept(ReviewsResponse reviewsResponse) throws Exception {
+                        reviewList.setValue(reviewsResponse.getResults());
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+
+                    }
+                });
+        compositeDisposable.add(disposable);
+
     }
 
     public LiveData<List<FavouriteMovie>> getFavouriteMovies() {
