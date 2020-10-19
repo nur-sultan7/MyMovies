@@ -131,11 +131,8 @@ public class MainActivity extends AppCompatActivity  {
         movieAdapter.setOnReachEndListener(new MovieAdapter.OnReachEndListener() {
             @Override
             public void onReachEnd() {
-                if(!isLoading)
-                {
-   //                viewModel.loadData(methodOfSort,page,lang);
-                }
-
+                page++;
+                   viewModel.loadData(methodOfSort,page,lang);
             }
         });
 
@@ -148,6 +145,23 @@ public class MainActivity extends AppCompatActivity  {
                     movieAdapter.setMovies(movies);
                 }
 
+            }
+        });
+
+        viewModel.getIsLoading().observe(this, new Observer<Boolean>() {
+            @Override
+            public void onChanged(Boolean aBoolean) {
+                if (aBoolean)
+                    progressBarLoading.setVisibility(View.VISIBLE);
+                else
+                    progressBarLoading.setVisibility(View.GONE);
+            }
+        });
+
+        viewModel.getListMoreVideos().observe(this, new Observer<List<Movie>>() {
+            @Override
+            public void onChanged(List<Movie> movies) {
+                movieAdapter.addMovies(movies);
             }
         });
 
@@ -166,6 +180,7 @@ public class MainActivity extends AppCompatActivity  {
             textViewPopularity.setTextColor(getResources().getColor(R.color.colorAccent));
             textViewTopRated.setTextColor(getResources().getColor(android.R.color.white));
         }
+
         viewModel.loadData(methodOfSort,page,lang);
     }
 

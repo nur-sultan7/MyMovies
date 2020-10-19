@@ -41,6 +41,16 @@ public class MainViewModel extends AndroidViewModel {
 
     private static MutableLiveData<List<Review>> reviewList;
     private static MutableLiveData<List<Video>>  videosList;
+    private static MutableLiveData<Boolean> isLoading;
+    private static MutableLiveData<List<Movie>> listMoreVideos;
+
+    public LiveData<Boolean> getIsLoading() {
+        return isLoading;
+    }
+
+    public LiveData<List<Movie>> getListMoreVideos() {
+        return listMoreVideos;
+    }
 
     public MainViewModel(@NonNull Application application) {
         super(application);
@@ -49,13 +59,13 @@ public class MainViewModel extends AndroidViewModel {
         favouriteMovies = database.movieDao().getAllFavouriteMovies();
         reviewList= new MutableLiveData<>();
         videosList = new MutableLiveData<>();
+        isLoading=new MutableLiveData<>();
+        listMoreVideos = new MutableLiveData<>();
     }
 
     public LiveData<List<Video>> getVideosList() {
         return videosList;
     }
-
-
     public LiveData<List<Review>> getReviewList() {
         return reviewList;
     }
@@ -65,6 +75,7 @@ public class MainViewModel extends AndroidViewModel {
 
 
     public void loadData(int sortBy, final int page, String lang) {
+        isLoading.setValue(true);
         String methodOfSort;
         if (sortBy == 0) {
             methodOfSort = SORT_BY_POPULARITY;
@@ -80,11 +91,18 @@ public class MainViewModel extends AndroidViewModel {
                 .subscribe(new Consumer<MovieResponse>() {
                     @Override
                     public void accept(MovieResponse moviewsResponse) throws Exception {
-
-                        List<Movie> list = movies.getValue();
+                        isLoading.setValue(false);
+                        if (page==1 &&  listMoreVideos.getValue()!=null && listMoreVideos.getValue().size()==0)
+                        {
+                            deleteTempMovies();
+                        }
                         if (page==1 && movies.getValue()!=null && movies.getValue().size()==0 ) {
-                           // deleteAllMovies();
                             insertMovies(moviewsResponse.getResults());
+                        }
+                        else if (page>1)
+                        {
+                            insertTemporaryMovies(moviewsResponse.getResults());
+                            listMoreVideos.postValue(moviewsResponse.getResults());
                         }
 
                     }
@@ -141,6 +159,65 @@ public class MainViewModel extends AndroidViewModel {
                 });
         compositeDisposable.add(disposable);
 
+    }
+    public TemporaryMovie getTemporaryMovieById(int id) {
+      TemporaryMovie movie=null;
+        try {
+            movie= new GetMovieById().execute(id).get();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        return movie;
+    }
+    private static class GetMovieById extends AsyncTask<Integer,Void,TemporaryMovie>
+    {
+
+        @Override
+        protected TemporaryMovie doInBackground(Integer... integers) {
+            TemporaryMovie temporaryMovie = null;
+            if (integers[0]!=null)
+                temporaryMovie=database.movieDao().getTemporaryMovie(integers[0]);
+            return temporaryMovie;
+        }
+    }
+    @SuppressWarnings("unchecked")
+    public void insertTemporaryMovies(List<Movie> movies)
+    {
+        new InsertTempMoviesTask().execute(movies);
+    }
+    private static class InsertTempMoviesTask extends AsyncTask<List<Movie>,Void,Void>
+    {
+
+        @SafeVarargs
+        @Override
+        protected final Void doInBackground(List<Movie>... lists) {
+
+            if (lists[0]!=null && lists[0].size()>0)
+            {
+                List<TemporaryMovie> temporaryMovies = new ArrayList<>();
+                for (Movie movie: lists[0])
+                {
+                    temporaryMovies.add(new TemporaryMovie(movie));
+                }
+                database.movieDao().insertTemporaryMovies(temporaryMovies);
+            }
+            return null;
+        }
+    }
+    public void deleteTempMovies()
+    {
+        new DeleteTempMoviesTask().execute();
+    }
+    private static class DeleteTempMoviesTask extends AsyncTask<Void,Void,Void>
+    {
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            database.movieDao().deleteTempMovies();
+            return null;
+        }
     }
 
     public LiveData<List<FavouriteMovie>> getFavouriteMovies() {

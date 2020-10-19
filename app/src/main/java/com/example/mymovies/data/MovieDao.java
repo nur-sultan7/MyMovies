@@ -41,4 +41,15 @@ public interface MovieDao {
     @Delete
     void deleteFavouriteMovie(FavouriteMovie movie);
 
+    @Query("Select * from temporary_movies")
+    LiveData<List<TemporaryMovie>> getTemporaryMovies();
+
+    @Query("Select * from temporary_movies where id==:id")
+    TemporaryMovie getTemporaryMovie(int id);
+
+    @Insert
+    void insertTemporaryMovies(List<TemporaryMovie> temporaryMovieList);
+
+    @Query("Delete from temporary_movies")
+    void deleteTempMovies();
 }

@@ -21,6 +21,7 @@ import com.example.mymovies.adapters.TrailerAdapter;
 import com.example.mymovies.data.FavouriteMovie;
 import com.example.mymovies.data.MainViewModel;
 
+import com.example.mymovies.data.TemporaryMovie;
 import com.example.mymovies.data.Trailer;
 import com.example.mymovies.pojo.Movie;
 import com.example.mymovies.pojo.Review;
@@ -34,6 +35,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.ExecutionException;
 
 public class DetailActivity extends AppCompatActivity {
     private static final String BASE_YOUTUBE_URL ="https://www.youtube.com/watch?v=";
@@ -86,6 +88,9 @@ public class DetailActivity extends AppCompatActivity {
         if (fromParentActivity.equals("main"))
         {
             movie = viewModel.getMovieById(id);
+            if (movie==null)
+                    movie=viewModel.getTemporaryMovieById(id);
+       //     List<TemporaryMovie> temporaryMovies = viewModel.getListMoreVideos();
         }
         else
         {
