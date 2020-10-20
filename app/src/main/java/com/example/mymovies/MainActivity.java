@@ -55,7 +55,7 @@ public class MainActivity extends AppCompatActivity  {
 
     private static int page=1;
     private static int methodOfSort;
-    private static boolean isLoading = false;
+    private static boolean isFirstLoading;
 
     private static String lang;
 
@@ -97,6 +97,7 @@ public class MainActivity extends AppCompatActivity  {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        isFirstLoading=true;
         lang= Locale.getDefault().getLanguage();
         progressBarLoading = findViewById(R.id.progressBarLoad);
 
@@ -113,6 +114,10 @@ public class MainActivity extends AppCompatActivity  {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                page=1;
+          //      viewModel.deleteAllMovies();
+                movieAdapter.clear();
+               viewModel.deleteTempMovies();
+
                 setMethodOfSort(isChecked);
             }
 
@@ -132,7 +137,7 @@ public class MainActivity extends AppCompatActivity  {
             @Override
             public void onReachEnd() {
                 page++;
-                   viewModel.loadData(methodOfSort,page,lang);
+                   viewModel.loadData(methodOfSort,page,lang,isFirstLoading);
             }
         });
 
@@ -140,7 +145,7 @@ public class MainActivity extends AppCompatActivity  {
         moviesFromLiveData.observe(this, new Observer<List<Movie>>() {
             @Override
             public void onChanged(List<Movie> movies) {
-                if (page==1)
+                if (page==1 )
                 {
                     movieAdapter.setMovies(movies);
                 }
@@ -181,7 +186,8 @@ public class MainActivity extends AppCompatActivity  {
             textViewTopRated.setTextColor(getResources().getColor(android.R.color.white));
         }
 
-        viewModel.loadData(methodOfSort,page,lang);
+        viewModel.loadData(methodOfSort,page,lang,isFirstLoading);
+        isFirstLoading=false;
     }
 
     public void onClickSetTopRated(View view) {

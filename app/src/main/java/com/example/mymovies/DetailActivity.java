@@ -98,7 +98,7 @@ public class DetailActivity extends AppCompatActivity {
         }
         Picasso.get()
                 .load(movie.getBigPosterPath())
-                .placeholder(R.drawable.ic_movie)
+              //  .placeholder(R.drawable.ic_movie)
                 .into(imageViewBigPoster);
         textViewTitle.setText(movie.getTitle());
         textViewOriginalTitle.setText(movie.getOriginalTitle());
